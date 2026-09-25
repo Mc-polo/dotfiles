@@ -209,7 +209,7 @@ alias -g G='| grep'
 alias -g L='| less -R'
 alias cd..='cd ..'
 #alias ls='/bin/ls --color -F'
-alias ls='eza'
+alias ls='eza --color=always --icons=always --long --header --git --time-style=relative --group-directories-first'
 alias ll='eza -lla'
 alias lm='eza -las modified'
 alias h=history
@@ -243,7 +243,7 @@ alias kt-up='rsync -av /home/ville/skannaukset/kuulontuki/kitsas/KuulonTukiry-ar
 
 function mcp() { cp $1 $2 ; cd $2 };
 function mkd() { mkdir $1; cd $1 };
-	alias less='less -R'
+	alias less='ov'
     alias cp='cp -i'
     alias mv='mv -i'
 
