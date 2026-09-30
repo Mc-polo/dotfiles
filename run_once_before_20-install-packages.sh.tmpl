@@ -11,7 +11,16 @@ sudo apt install -y \
     git \
     build-essential \
     htop \
-    jq vim zsh rsync tree btop age tmux curl bat eza
+    jq vim zsh rsync tree btop age tmux curl bat eza \
+zsh-autosuggestions zsh-syntax-highlighting
+
+# Set zsh as default shell if not already
+if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$(which zsh)" ]; then
+  echo "Setting zsh as default shell..."
+  chsh -s "$(which zsh)"
+fi
+
+curl -sS https://starship.rs/install.sh | sh
 
 {{   end -}}
 {{ end -}}
