@@ -206,12 +206,13 @@ zstyle ':completion:*' users $users
 # aliases
 #
 alias -g G='| grep'
-alias -g L='| less -R'
+alias -g L='| ov'
 alias cd..='cd ..'
 #alias ls='/bin/ls --color -F'
 alias ls='eza --color=always --icons=always --long --header --git --time-style=relative --group-directories-first'
-alias ll='eza -lla'
-alias lm='eza -las modified'
+alias ll='eza -a --color=always --icons=always --long --header --git --time-style=relative --group-directories-first'
+alias lm='eza -a -s modified --color=always --icons=always --long --header --git --time-style=relative'
+#alias lm='ls -las modified'
 alias h=history
 alias cdw='cd /mnt/work'
 alias la='ls -s size -l'
