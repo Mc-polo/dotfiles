@@ -12,6 +12,12 @@ else
     echo "Discord on jo asennettu."
 fi
 
+if command -v element-desktop &> /dev/null; then
+    echo "element-desktop on asennettu."
+else
+{
+
+    echo "element-desktop ei ole asennettu."
 sudo apt install -y wget apt-transport-https
 sudo wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main" | sudo tee /etc/apt/sources.list.d/element-io.list
@@ -19,27 +25,32 @@ echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https:/
 sudo apt update
 
 sudo apt install -y element-desktop
+}
+fi
 
 echo "Asennetaan peruspaketit (APT)..."
+sudo apt update
 sudo apt install -y \
     curl \
     git \
     build-essential \
     htop \
-fish \ 
-    jq vim zsh rsync tree btop age tmux curl bat eza \
+fish \
+	vim zsh rsync tree btop age tmux curl bat eza \
 zsh-autosuggestions zsh-syntax-highlighting
 
-# Set zsh as default shell if not already
-if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$(which zsh)" ]; then
-  echo "Setting zsh as default shell..."
-  chsh -s "$(which zsh)"
+# Set fish as default shell if not already
+if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$(which fish)" ]; then
+  echo "Setting fish as default shell..."
+  chsh -s "$(which fish)"
+else
+	echo "Fish already default shell"
 fi
 
-if ! command -v starship >/dev/null 2>&1; then
-    echo "Starshipiä ei löytynyt, asennetaan..."
-curl -sS https://starship.rs/install.sh | sh
-fi
+#if ! command -v starship >/dev/null 2>&1; then
+#    echo "Starshipiä ei löytynyt, asennetaan..."
+#curl -sS https://starship.rs/install.sh | sh
+#fi
 {{   end -}}
 {{ end -}}
 
