@@ -37,6 +37,8 @@ paivitawwwarkisto;
 rsync -av --delete --exclude=.svn ~/helky/ ~/Dropbox/hhk
 };
 
+alias cmup="chezmoi git add . && chezmoi git commit -- -m $1"
+
 function dokutpdfksi () {
 for file in $@;
 do lowriter --headless --convert-to pdf $file;
