@@ -1,4 +1,5 @@
 abbr -a --position anywhere L '| ov'
+abbr -a --position anywhere G '| grep -i'
 abbr -a upgrade 'sudo apt update && sudo apt upgrade'
 abbr -a open "xdg-open $1"
 abbr -a ls 'eza --color=always --icons=always --long --header --git --time-style=relative --group-directories-first'
