@@ -1,0 +1,6 @@
+Host github.com
+    ForwardX11 no
+    ForwardX11Trusted no
+
+Host *
+ForwardX11 yes
