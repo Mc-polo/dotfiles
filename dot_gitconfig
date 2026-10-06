@@ -1,3 +1,5 @@
 [user]
 	email = ville.myllymaki@iki.fi
 	name = Ville Myllymäki
+[pull]
+	rebase = true
