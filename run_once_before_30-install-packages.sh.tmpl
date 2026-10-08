@@ -3,28 +3,66 @@
 # Ajo vain Ubuntulla / Debianilla / Pop!_OS:lla
 {{ if eq .chezmoi.os "linux" -}}
 {{ if has .chezmoi.osRelease.id (list "pop" "ubuntu" "debian") -}}
-# --- Homebrew ---
-if command -v brew &> /dev/null; then
-    echo "Homebrew on jo asennettu."
-else
-    echo "Homebrewta ei löytynyt, asennetaan..."
-    # Asennetaan Brew ilman interaktiivisia kysymyksiä NONINTERACTIVE=1 avulla
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-    # Ladataan brew ympäristömuuttujiin loppuskriptin ajaksi
-    if [ -d "/home/linuxbrew/.linuxbrew" ]; then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    elif [ -d "$HOME/.linuxbrew" ]; then
-        eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
-    fi
+# Apufunktio valinnalle. Lukee syötteen suoraan päätteeltä (/dev/tty).
+prompt_brew_install() {
+    echo "--------------------------------------------------"
+    echo "Homebrewta ei löytynyt. Valitse asennustapa:"
+    echo "1) Yleinen / Järjestelmänlaajuinen (/home/linuxbrew/.linuxbrew - vaatii sudo-oikeudet)"
+    echo "2) Käyttäjän kotihakemisto ($HOME/.linuxbrew - ei vaadi sudoa)"
+    echo "3) Älä asenna Homebrewta"
+    echo "--------------------------------------------------"
+    
+    local choice
+    while true; do
+        read -r -p "Valitse vaihtoehto [1-3]: " choice < /dev/tty
+        case "$choice" in
+            1) return 1 ;;
+            2) return 2 ;;
+            3) return 3 ;;
+            *) echo "Virheellinen valinta. Syötä 1, 2 tai 3." ;;
+        esac
+    done
+}
+
+# --- 1. Alkutarkistus: Onko Homebrew jo asennettu? ---
+if command -v brew &> /dev/null || [ -d "/home/linuxbrew/.linuxbrew" ] || [ -d "$HOME/.linuxbrew" ]; then
+    echo "Homebrew on jo asennettu järjestelmään."
+else
+    # --- 2. Kysytään asennustapa vain, jos Homebrewta ei ole vielä asennettu ---
+    prompt_brew_install
+    INSTALL_TYPE=$?
+
+    case $INSTALL_TYPE in
+        1)
+            echo "Asennetaan Homebrew järjestelmänlaajuisesti (/home/linuxbrew/.linuxbrew)..."
+            NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            ;;
+        2)
+            echo "Asennetaan Homebrew kotihakemistoon ($HOME/.linuxbrew)..."
+            mkdir -p "$HOME/.linuxbrew"
+            NONINTERACTIVE=1 HOMEBREW_PREFIX="$HOME/.linuxbrew" /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            ;;
+        3)
+            echo "Ohitetaan Homebrewn asennus."
+            ;;
+    esac
 fi
 
-# Tarkistetaan asennuksen onnistuminen
+# --- 3. Ladataan brew ympäristömuuttujiin loppuskriptin ajaksi ---
+if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+elif [ -d "$HOME/.linuxbrew" ]; then
+    eval "$("$HOME/.linuxbrew/bin/brew" shellenv)"
+fi
+
+# --- 4. Asennetaan paketit, jos brew on käytettävissä ---
 if command -v brew &> /dev/null; then
     echo "Homebrew valmiina käyttöön: $(brew --version | head -n 1)"
-brew install ov pdfcpu
+    echo "Asennetaan paketteja (ov, pdfcpu)..."
+    brew install ov pdfcpu
 else
-    echo "Varoitus: Homebrewn asennus epäonnistui tai brew-komentoa ei löytynyt PATHista."
+    echo "Homebrew ei ole käytettävissä (ohitettu tai asennus epäonnistui)."
 fi
 
 {{ end -}}
