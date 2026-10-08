@@ -4,13 +4,27 @@
 {{ if eq .chezmoi.os "linux" -}}
 {{ if has .chezmoi.osRelease.id (list "pop" "ubuntu" "debian") -}}
 
+confirm() {
+    local prompt="$1"
+    local response
+    while true; do
+        read -r -p "$prompt [k/e]: " response < /dev/tty
+        case "$response" in
+            [Kk]* ) return 0;;
+            [Ee]* ) return 1;;
+            * ) echo "Vastaa 'k' (kyllä) tai 'e' (ei).";;
+        esac
+    done
+}
+if confirm "Haluatko asentaa ohjelmapaketit (mukaan lukien Element Desktop, Fish, CLI-työkalut)?"; then
+
 ## Tarkistetaan onko Discord jo asennettu Flatpakina
-#if ! flatpak list | grep -q "com.discordapp.Discord"; then
-#    echo "Asennetaan Discord (Flatpak)..."
-#    flatpak install --user -y flathub com.discordapp.Discord
-#else
-#    echo "Discord on jo asennettu."
-#fi
+if ! flatpak list | grep -q "com.discordapp.Discord"; then
+    echo "Asennetaan Discord (Flatpak)..."
+    flatpak install --user -y flathub com.discordapp.Discord
+else
+    echo "Discord on jo asennettu."
+fi
 
 
 # --- Element Desktop ---
@@ -45,6 +59,9 @@ sudo apt install -y \
     eza \
     zsh-autosuggestions \
     zsh-syntax-highlighting
+else
+    echo "Ohitetaan pakettien asennus."
+fi
 
 # --- Vaihdetaan Oletusshell (Fish) ---
 FISH_PATH="$(which fish)"
