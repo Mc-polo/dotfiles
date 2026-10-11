@@ -1,0 +1,40 @@
+#!/bin/bash
+
+sudo apt update
+sudo apt -y upgrade
+sudo apt -y dist-upgrade
+sudo apt autoremove
+sudo apt autoclean
+
+sudo apt install \
+vim virtualbox timeshift curl snapper-gui \
+openssh-server nvtop anacron mosh
+
+
+#Syncthing
+sudo mkdir -p /etc/apt/keyrings
+sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
+echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+sudo apt update
+sudo apt install syncthing
+
+sudo systemctl enable syncthing@$USER.service
+sudo systemctl start syncthing@$USER.service
+
+#flameshot
+# flatpak run org.flameshot.Flameshot gui -d 0 --raw --path /home/ville/Sync/Kuvat/Kuvakaappaukset/ | wl-copy
+sudo flatpak install flathub org.flameshot.Flameshot
+flatpak override --user --filesystem=/home/ville/Sync/Kuvat/Kuvakaappaukset/ org.flameshot.Flameshot
+
+#firacode nerd
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts
+curl -fLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCode.zip
+
+unzip -o FiraCode.zip
+rm FiraCode.zip
+
+fc-cache -fv
+
+#seur
+
