@@ -60,7 +60,7 @@ fi
 if command -v brew &> /dev/null; then
     echo "Homebrew valmiina käyttöön: $(brew --version | head -n 1)"
     echo "Asennetaan paketteja (ov, pdfcpu)..."
-    brew install ov pdfcpu
+    brew install ov pdfcpu age bat eza btop
 else
     echo "Homebrew ei ole käytettävissä (ohitettu tai asennus epäonnistui)."
 fi
