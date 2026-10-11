@@ -53,7 +53,6 @@ sudo apt install -y \
     rsync \
     tree \
     btop \
-    age \
     tmux \
     bat \
     eza \
@@ -83,10 +82,11 @@ if command -v starship &> /dev/null; then
     echo "Starship on jo asennettu."
 else
     echo "Asennetaan Starship-prompt..."
+    # Varmistetaan, että kohdehakemisto on olemassa
+    mkdir -p "$HOME/.local/bin"
     # Asennetaan Starship käyttäjän kotihakemiston .local/bin-kansioon ilman sudoa
     sh -c "$(curl -sS https://starship.rs/install.sh)" -- -y -b "$HOME/.local/bin"
 fi
-
 
 
 {{ end -}}
