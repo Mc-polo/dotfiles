@@ -78,5 +78,16 @@ else
     echo "Fish on jo oletusshell."
 fi
 
+# --- 5. Starship-promptin asennus ---
+if command -v starship &> /dev/null; then
+    echo "Starship on jo asennettu."
+else
+    echo "Asennetaan Starship-prompt..."
+    # Asennetaan Starship käyttäjän kotihakemiston .local/bin-kansioon ilman sudoa
+    sh -c "$(curl -sS https://starship.rs/install.sh)" -- -y -b "$HOME/.local/bin"
+fi
+
+
+
 {{ end -}}
 {{ end -}}
