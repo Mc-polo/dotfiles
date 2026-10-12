@@ -1,1 +1,2 @@
 map rr :%s/\;/\r/g <bar> :%s/[\ \+\-a-zA-ZäöÄÖ\(\)]//g <bar> :%s/^09.*$//g <bar> :g/^$/d <bar> %s/^0/358/g <CR> 
+autocmd BufRead,BufNewFile *.sh.tmpl setfiletype sh

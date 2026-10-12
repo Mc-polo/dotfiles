@@ -33,7 +33,7 @@ BREW_PACKAGES="ov pdfcpu age bat eza btop"
 # --- 1. Alkutarkistus: Onko Homebrew jo asennettu? ---
 if command -v brew &> /dev/null || [ -d "$BREW_GLOBAL" ] || [ -d "$BREW_LOCAL" ]; then
 echo "Homebrew on jo asennettu järjestelmään. Asennetaan varmuudeksi tietyt ohjelmat."
-brew install "$BREW_PACKAGES"
+#brew install $BREW_PACKAGES
 
 else
 # --- 2. Kysytään asennustapa vain, jos Homebrewta ei ole vielä asennettu ---
@@ -69,7 +69,7 @@ fi
 if command -v brew &> /dev/null; then
 echo "Homebrew valmiina käyttöön: $(brew --version | head -n 1)"
 echo "Asennetaan paketteja (ov, pdfcpu)..."
-brew install "$BREW_PACKAGES"
+brew install $BREW_PACKAGES
 else
 echo "Homebrew ei ole käytettävissä (ohitettu tai asennus epäonnistui)."
 fi

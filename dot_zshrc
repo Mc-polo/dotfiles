@@ -309,6 +309,6 @@ export LC_LANG="en_US.utf8"
 
 alias dokkeri="sudo docker run -it --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --device=/dev/kfd --device=/dev/dri --group-add video --ipc=host --shm-size 32G -v /home/ville:/datat ville/rocm:version4"
 
-eval "$(starship init zsh)"
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+#eval "$(starship init zsh)"
+#
+exec "$(command -v fish)" || echo "No fish for you."

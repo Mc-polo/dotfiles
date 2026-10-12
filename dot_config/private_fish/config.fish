@@ -7,9 +7,10 @@ end
 
 if test -d ~/.linuxbrew
 	eval (~/.linuxbrew/bin/brew shellenv)
+end
 
 #2.
-fish_add_path $/bin
+fish_add_path $home/bin
 
 # 2. Vain interaktiiviset sessiot (pääte, kursorit, teemat jne.)
 if status is-interactive
