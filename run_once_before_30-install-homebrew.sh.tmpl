@@ -28,7 +28,7 @@ prompt_brew_install() {
 # Määritetään mahdolliset polut
 BREW_GLOBAL="/home/linuxbrew/.linuxbrew"
 BREW_LOCAL="$HOME/.linuxbrew"
-BREW_PACKAGES="ov pdfcpu age bat eza btop bitwarden-cli"
+BREW_PACKAGES="ov pdfcpu age bat eza btop"
 
 # --- 1. Alkutarkistus: Onko Homebrew jo asennettu? ---
 if command -v brew &> /dev/null || [ -d "$BREW_GLOBAL" ] || [ -d "$BREW_LOCAL" ]; then
