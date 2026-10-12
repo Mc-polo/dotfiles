@@ -10,7 +10,8 @@ if test -d ~/.linuxbrew
 end
 
 #2.
-fish_add_path $home/bin
+fish_add_path $HOME/bin
+fish_add_path $HOME/.local/bin
 
 # 2. Vain interaktiiviset sessiot (pääte, kursorit, teemat jne.)
 if status is-interactive
