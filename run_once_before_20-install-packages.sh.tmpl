@@ -4,6 +4,24 @@
 {{ if eq .chezmoi.os "linux" -}}
 {{ if has .chezmoi.osRelease.id (list "pop" "ubuntu" "debian") -}}
 
+# Muuttuja johon peruspaketit listataan
+declare -a basic_packages=(
+    curl
+    git
+    build-essential
+    htop
+    fish
+    vim
+    zsh
+    rsync
+    tree
+    btop
+    bat
+    eza
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+
 confirm() {
     local prompt="$1"
     local response
@@ -16,6 +34,7 @@ confirm() {
         esac
     done
 }
+
 if confirm "Haluatko asentaa ohjelmapaketit (mukaan lukien Element Desktop, Fish, CLI-työkalut)?"; then
 
 # --- Element Desktop ---
@@ -26,29 +45,19 @@ if ! command -v element-desktop &> /dev/null; then
     echo "deb [signed-by=/usr/share/keyrings/element-io-archive-keyring.gpg] https://packages.element.io/debian/ default main" | sudo tee /etc/apt/sources.list.d/element-io.list
     sudo apt update
     sudo apt install -y element-desktop
+else
+    echo "Element Desktop on jo asennettu."
 fi
 
-# --- Peruspaketit ---
-echo "Asennetaan peruspaketit (APT)..."
-sudo apt update
-sudo apt install -y \
-    curl \
-    git \
-    build-essential \
-    htop \
-    fish \
-    vim \
-    zsh \
-    rsync \
-    tree \
-    btop \
-    bat \
-    eza \
-    zsh-autosuggestions \
-    zsh-syntax-highlighting
-else
-    echo "Ohitetaan pakettien asennus."
-fi
+# Tarkistetaan ennen asennusta, ovatko peruspaketit jo asennettu
+for package in "${basic_packages[@]}"; do
+    if ! dpkg -s "$package" &> /dev/null; then
+        echo "$package ei ole asennettu, asennetaan..."
+        sudo apt install -y "$package"
+    else
+        echo "$package on jo asennettu."
+    fi
+done
 
 HOST_NAME="$(cat /etc/hostname 2>/dev/null | tr -d '[:space:]')"
 
