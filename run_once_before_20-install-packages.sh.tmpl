@@ -18,19 +18,8 @@ confirm() {
 }
 if confirm "Haluatko asentaa ohjelmapaketit (mukaan lukien Element Desktop, Fish, CLI-työkalut)?"; then
 
-## Tarkistetaan onko Discord jo asennettu Flatpakina
-if ! flatpak list | grep -q "com.discordapp.Discord"; then
-    echo "Asennetaan Discord (Flatpak)..."
-    flatpak install --user -y flathub com.discordapp.Discord
-else
-    echo "Discord on jo asennettu."
-fi
-
-
 # --- Element Desktop ---
-if command -v element-desktop &> /dev/null; then
-    echo "element-desktop on jo asennettu."
-else
+if ! command -v element-desktop &> /dev/null; then
     echo "element-desktop ei ole asennettu, asennetaan..."
     sudo apt update && sudo apt install -y wget apt-transport-https
     sudo wget -O /usr/share/keyrings/element-io-archive-keyring.gpg https://packages.element.io/debian/element-io-archive-keyring.gpg
@@ -53,7 +42,6 @@ sudo apt install -y \
     rsync \
     tree \
     btop \
-    tmux \
     bat \
     eza \
     zsh-autosuggestions \
@@ -64,10 +52,10 @@ fi
 
 HOST_NAME="$(cat /etc/hostname 2>/dev/null | tr -d '[:space:]')"
 
-if [ "$HOST_NAME" != "lakka" ]; then
+if [[ "lakka" != "$HOST_NAME" ]]; then
     # --- Vaihdetaan Oletusshell (Fish) ---
     FISH_PATH="$(which fish)"
-    if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$FISH_PATH" ]; then
+    if [[ "$FISH_PATH" != "$(getent passwd "$USER" | cut -d: -f7)" ]]; then
         echo "Asetetaan Fish oletusshelliksi..."
 
         # Varmistetaan että fish löytyy /etc/shells-tiedostosta ennen chsh-komentoa
@@ -79,21 +67,16 @@ if [ "$HOST_NAME" != "lakka" ]; then
     else
         echo "Fish on jo oletusshell."
     fi
-else
-    echo "Host on lakka – ohitetaan Fishin vaihto."
 fi
 
 # --- 5. Starship-promptin asennus ---
-if command -v starship &> /dev/null; then
-    echo "Starship on jo asennettu."
-else
+if ! command -v starship &> /dev/null; then
     echo "Asennetaan Starship-prompt..."
     # Varmistetaan, että kohdehakemisto on olemassa
     mkdir -p "$HOME/.local/bin"
     # Asennetaan Starship käyttäjän kotihakemiston .local/bin-kansioon ilman sudoa
     sh -c "$(curl -sS https://starship.rs/install.sh)" -- -y -b "$HOME/.local/bin"
 fi
-
 
 {{ end -}}
 {{ end -}}
