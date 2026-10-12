@@ -62,19 +62,25 @@ else
     echo "Ohitetaan pakettien asennus."
 fi
 
-# --- Vaihdetaan Oletusshell (Fish) ---
-FISH_PATH="$(which fish)"
-if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$FISH_PATH" ]; then
-    echo "Asetetaan Fish oletusshelliksi..."
-    
-    # Varmistetaan että fish löytyy /etc/shells-tiedostosta ennen chsh-komentoa
-    if ! grep -q "$FISH_PATH" /etc/shells; then
-        echo "$FISH_PATH" | sudo tee -a /etc/shells
+HOST_NAME="$(cat /etc/hostname 2>/dev/null | tr -d '[:space:]')"
+
+if [ "$HOST_NAME" != "lakka" ]; then
+    # --- Vaihdetaan Oletusshell (Fish) ---
+    FISH_PATH="$(which fish)"
+    if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$FISH_PATH" ]; then
+        echo "Asetetaan Fish oletusshelliksi..."
+
+        # Varmistetaan että fish löytyy /etc/shells-tiedostosta ennen chsh-komentoa
+        if ! grep -q "$FISH_PATH" /etc/shells; then
+            echo "$FISH_PATH" | sudo tee -a /etc/shells
+        fi
+
+        chsh -s "$FISH_PATH"
+    else
+        echo "Fish on jo oletusshell."
     fi
-    
-    chsh -s "$FISH_PATH"
 else
-    echo "Fish on jo oletusshell."
+    echo "Host on lakka – ohitetaan Fishin vaihto."
 fi
 
 # --- 5. Starship-promptin asennus ---
