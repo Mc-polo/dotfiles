@@ -13,7 +13,8 @@ end
 fish_add_path $HOME/bin
 fish_add_path $HOME/.local/bin
 
-# 2. Vain interaktiiviset sessiot (pääte, kursorit, teemat jne.)
+
+# 3. Vain interaktiiviset sessiot (pääte, kursorit, teemat jne.)
 if status is-interactive
     # Starship-promptin alustus
     starship init fish | source
